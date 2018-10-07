@@ -23,12 +23,12 @@ async function start() {
         await server.start();
 
 
-        let web3 = new Web3(new Web3.providers.WebsocketProvider('ws://127.0.0.1:9988'))
+        let web3 = new Web3(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws'))
 
         // VotingContract.setProvider(web3.currentProvider)
         return web3.eth.getAccounts()
         .then(async accounts => {
-            var myContract = new web3.eth.Contract(votingArtifacts.abi, '0x02cc57d51281b30e60d97f56caec34112fb8ccad');
+            var myContract = new web3.eth.Contract(votingArtifacts.abi, '0xb7b2ba99a54ed57c02fdd77a0450bde1bb4cd9c6');
 
             myContract.events.VotedCadidate(
                 { fromBlock: 0},
@@ -43,7 +43,7 @@ async function start() {
             )
             .on('data', async function(event){
 
-                await voteFor(Number(event.returnValues.candidateID));
+                voteFor(Number(event.returnValues.candidateID));
 
                 // console.log('Voted Candidate:', event.returnValues);
                 // console.log('Voted Candidate:', event.returnValues.candidateID);
